@@ -282,12 +282,16 @@ function App() {
       }}
     >
       {/* Clouds as background elements */}
-      <div className="cloud left" style={{ zIndex: 0 }} />
-      <div className="cloud left2" style={{ zIndex: 0 }} />
-      <div className="cloud left3" style={{ zIndex: 0 }} />
-      <div className="cloud right" style={{ zIndex: 0 }} />
-      <div className="cloud right2" style={{ zIndex: 0 }} />
-      <div className="cloud right3" style={{ zIndex: 0 }} />
+      <div className="cloud c1" style={{ zIndex: 0 }} />
+      <div className="cloud c2" style={{ zIndex: 0 }} />
+      <div className="cloud c3" style={{ zIndex: 0 }} />
+      <div className="cloud c4" style={{ zIndex: 0 }} />
+      <div className="cloud c5" style={{ zIndex: 0 }} />
+      <div className="cloud c6" style={{ zIndex: 0 }} />
+      <div className="cloud c7" style={{ zIndex: 0 }} />
+      <div className="cloud c8" style={{ zIndex: 0 }} />
+      <div className="cloud c9" style={{ zIndex: 0 }} />
+      <div className="cloud c10" style={{ zIndex: 0 }} />
       <Box sx={{ position: "relative", zIndex: 1 }}>
         <Typography className="kartulilennuk-title" variant="h3" gutterBottom>
           Cloudy With a Chance of Delays
