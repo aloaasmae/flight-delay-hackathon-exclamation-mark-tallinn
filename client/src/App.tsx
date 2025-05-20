@@ -326,6 +326,7 @@ function App() {
     airportName: string;
     dayName: string;
     planeType: number;
+    exploding?: boolean;
   }[]>([]);
   const planeIdRef = useRef(0);
 
@@ -386,11 +387,24 @@ function App() {
         airportName: airportName || "",
         dayName: dayName || "",
         planeType,
-      } as typeof prev[number] & { planeType: number }
+        exploding: false,
+      }
     ]);
     setTimeout(() => {
       setPlanes((prev) => prev.filter((plane) => plane.id !== id));
     }, duration * 1000);
+  };
+
+  // Handle plane click for explosion
+  const handlePlaneClick = (planeId: number) => {
+    setPlanes((prev) =>
+      prev.map((p) =>
+        p.id === planeId ? { ...p, exploding: true } : p
+      )
+    );
+    setTimeout(() => {
+      setPlanes((prev) => prev.filter((p) => p.id !== planeId));
+    }, 700); // match explosion animation duration
   };
 
   // Filter airports by name (case-insensitive)
@@ -470,27 +484,58 @@ function App() {
             pointerEvents: "none",
           }}
         >
-          {/* Bigger and random plane SVG */}
-          {planeSvgs[plane.planeType]}
           <div
+            className={
+              (plane.duration > 4 ? "plane-wiggle " : "") +
+              (plane.exploding ? "plane-exploding" : "")
+            }
             style={{
-              marginTop: 12,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              fontWeight: 600,
-              color: "#8b4513",
-              background: "#fff5e1",
-              borderRadius: 6,
-              padding: "4px 14px",
-              fontSize: 18,
-              boxShadow: "0 1px 4px rgba(139,69,19,0.07)",
-              minWidth: 110,
+              cursor: plane.exploding ? "default" : "pointer",
+              pointerEvents: plane.exploding ? "none" : "auto",
+              position: "relative",
+              display: "inline-block",
             }}
+            onClick={
+              plane.exploding
+                ? undefined
+                : (e) => {
+                    e.stopPropagation();
+                    handlePlaneClick(plane.id);
+                  }
+            }
           >
-            <span>{plane.dayName}</span>
-            <span>{plane.airportName}</span>
+            {planeSvgs[plane.planeType]}
+            {plane.exploding && (
+              <svg className="explosion-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="22" fill="gold" opacity="0.8"/>
+                <circle cx="40" cy="40" r="14" fill="orange" opacity="0.7"/>
+                <circle cx="40" cy="40" r="7" fill="red" opacity="0.6"/>
+                <polygon points="40,10 44,32 70,20 48,40 70,60 44,48 40,70 36,48 10,60 32,40 10,20 36,32"
+                  fill="yellow" opacity="0.5"/>
+              </svg>
+            )}
           </div>
+          {!plane.exploding && (
+            <div
+              style={{
+                marginTop: 12,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                fontWeight: 600,
+                color: "#8b4513",
+                background: "#fff5e1",
+                borderRadius: 6,
+                padding: "4px 14px",
+                fontSize: 18,
+                boxShadow: "0 1px 4px rgba(139,69,19,0.07)",
+                minWidth: 110,
+              }}
+            >
+              <span>{plane.dayName}</span>
+              <span>{plane.airportName}</span>
+            </div>
+          )}
         </div>
       ))}
       <Box sx={{ position: "relative", zIndex: 1 }}>
