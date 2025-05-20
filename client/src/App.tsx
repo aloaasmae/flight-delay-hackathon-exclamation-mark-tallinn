@@ -17,7 +17,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./App.css";
 import LoginPage from "./LoginPage";
 import PaywallDialog from "./PaywallDialog";
@@ -72,7 +72,7 @@ function PredictCell({
   dayIndex: number;
   airportId: number;
   canHover: boolean;
-  onHoverAttempt: () => void;
+  onHoverAttempt: (delayChance?: number) => void;
 }) {
   const [hovered, setHovered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -104,13 +104,15 @@ function PredictCell({
         .then((data) => {
           setResult(data);
           setLoading(false);
+          onHoverAttempt(data.delayChance);
         })
         .catch(() => {
           setError("Error");
           setLoading(false);
         });
+    } else {
+      onHoverAttempt(result?.delayChance);
     }
-    onHoverAttempt();
   };
 
   const handleMouseLeave = () => {
@@ -223,6 +225,16 @@ function App() {
   const [hoverViews, setHoverViews] = useState(1); // 1 free view
   const [paywallOpen, setPaywallOpen] = useState(false);
 
+  // Plane animation state
+  const [planes, setPlanes] = useState<{
+    id: number;
+    duration: number;
+    top: number;
+    airportName: string;
+    dayName: string;
+  }[]>([]);
+  const planeIdRef = useRef(0);
+
   // Dummy login logic for demonstration
   const handleLogin = async () => {
     setLoggedIn(true);
@@ -255,6 +267,34 @@ function App() {
   useEffect(() => {
     document.title = "Cloudy With a Chance of Delays";
   }, []);
+
+  // Plane animation logic
+  const triggerPlane = (delayChance?: number, airportName?: string, dayName?: string) => {
+    // Default to 0.2 if not provided
+    const chance = typeof delayChance === "number" ? delayChance : 0.2;
+    // Increased variability: 0.2 (fastest) to 0.25 (slowest) maps to 1.0s - 7.0s
+    const minChance = 0.2, maxChance = 0.25;
+    const minDuration = 1.0, maxDuration = 7.0;
+    const ratio = Math.max(0, Math.min((chance - minChance) / (maxChance - minChance), 1));
+    const duration = minDuration + (maxDuration - minDuration) * ratio;
+
+    const id = ++planeIdRef.current;
+    // Random top between 10% and 40%
+    const top = Math.random() * 30 + 10;
+    setPlanes((prev) => [
+      ...prev,
+      {
+        id,
+        duration,
+        top,
+        airportName: airportName || "",
+        dayName: dayName || "",
+      },
+    ]);
+    setTimeout(() => {
+      setPlanes((prev) => prev.filter((plane) => plane.id !== id));
+    }, duration * 1000);
+  };
 
   // Filter airports by name (case-insensitive)
   const filteredAirports = airports.filter((a) =>
@@ -319,6 +359,56 @@ function App() {
       <div className="cloud c8" style={{ zIndex: 0 }} />
       <div className="cloud c9" style={{ zIndex: 0 }} />
       <div className="cloud c10" style={{ zIndex: 0 }} />
+      {/* Animated planes */}
+      {planes.map((plane) => (
+        <div
+          className="plane-fly-animation"
+          key={plane.id}
+          style={{
+            animationDuration: `${plane.duration}s`,
+            top: `${plane.top}%`,
+            zIndex: 1200,
+            position: "fixed",
+            left: "-80px",
+            pointerEvents: "none",
+          }}
+        >
+          {/* Updated SVG: stylized airplane */}
+          <svg width="60" height="32" viewBox="0 0 60 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Fuselage */}
+            <rect x="8" y="14" width="32" height="4" rx="2" fill="#8b4513"/>
+            {/* Nose */}
+            <ellipse cx="44" cy="16" rx="6" ry="3" fill="#8b4513"/>
+            {/* Tail fin */}
+            <polygon points="8,14 4,10 8,18" fill="#8b4513"/>
+            {/* Left wing */}
+            <polygon points="20,14 12,8 22,16" fill="#a0522d"/>
+            {/* Right wing */}
+            <polygon points="20,18 12,24 22,14" fill="#a0522d"/>
+            {/* Window/cockpit */}
+            <ellipse cx="46" cy="16" rx="2" ry="1.2" fill="#fff5e1"/>
+          </svg>
+          <div
+            style={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              fontWeight: 600,
+              color: "#8b4513",
+              background: "#fff5e1",
+              borderRadius: 6,
+              padding: "2px 10px",
+              fontSize: 15,
+              boxShadow: "0 1px 4px rgba(139,69,19,0.07)",
+              minWidth: 90,
+            }}
+          >
+            <span>{plane.dayName}</span>
+            <span>{plane.airportName}</span>
+          </div>
+        </div>
+      ))}
       <Box sx={{ position: "relative", zIndex: 1 }}>
         <Typography className="kartulilennuk-title" variant="h3" gutterBottom>
           Cloudy With a Chance of Delays
@@ -417,7 +507,14 @@ function App() {
                                   dayIndex={dayIdx}
                                   airportId={airport.id}
                                   canHover={canHover}
-                                  onHoverAttempt={handleHoverAttempt}
+                                  onHoverAttempt={(delayChance?: number) => {
+                                    handleHoverAttempt();
+                                    triggerPlane(
+                                      delayChance,
+                                      airport.name,
+                                      day
+                                    );
+                                  }}
                               />
                           ))}
                         </TableRow>
