@@ -26,6 +26,10 @@ export default function LoginPage({ onLogin }: LoginProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Comic-style usernames and passwords
+  const comicUsernames = Array.from({ length: 1000 }, (_, i) => `CaptainQuokka${i+1}`);
+  const comicPasswords = Array.from({ length: 1000 }, (_, i) => `BananaRocket${i+1}`);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -69,6 +73,7 @@ export default function LoginPage({ onLogin }: LoginProps) {
           </Box>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
+              select
               label="Username"
               value={username}
               onChange={e => setUsername(e.target.value)}
@@ -87,10 +92,14 @@ export default function LoginPage({ onLogin }: LoginProps) {
                 borderRadius: 2,
                 mb: 2
               }}
-            />
+            >
+              {comicUsernames.map((name) => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </TextField>
             <TextField
+              select
               label="Password"
-              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
               fullWidth
@@ -101,25 +110,17 @@ export default function LoginPage({ onLogin }: LoginProps) {
                     <LockOutlinedIcon sx={{ color: '#8b4513' }} />
                   </InputAdornment>
                 ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() => setShowPassword((show) => !show)}
-                      edge="end"
-                      size="small"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                )
               }}
               sx={{
                 background: '#fff',
                 borderRadius: 2,
                 mb: 2
               }}
-            />
+            >
+              {comicPasswords.map((pw) => (
+                <option key={pw} value={pw}>{pw}</option>
+              ))}
+            </TextField>
             {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
             <Button
               type="submit"
