@@ -17,7 +17,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import "./App.css";
 import LoginPage from "./LoginPage";
 import PaywallDialog from "./PaywallDialog";
@@ -407,14 +407,25 @@ function App() {
     }, 700); // match explosion animation duration
   };
 
-  // Filter airports by name (case-insensitive)
-  const filteredAirports = airports.filter((a) =>
-    a.name.toLowerCase().includes(filter.toLowerCase())
+  // Memoize filtered and paged airports for performance
+  const filteredAirports = useMemo(
+    () =>
+      airports.filter((a) =>
+        a.name.toLowerCase().includes(filter.toLowerCase())
+      ),
+    [airports, filter]
   );
-  const totalPages = Math.ceil(filteredAirports.length / AIRPORTS_PER_PAGE);
-  const pagedAirports = filteredAirports.slice(
-    (page - 1) * AIRPORTS_PER_PAGE,
-    page * AIRPORTS_PER_PAGE
+  const totalPages = useMemo(
+    () => Math.ceil(filteredAirports.length / AIRPORTS_PER_PAGE),
+    [filteredAirports.length]
+  );
+  const pagedAirports = useMemo(
+    () =>
+      filteredAirports.slice(
+        (page - 1) * AIRPORTS_PER_PAGE,
+        page * AIRPORTS_PER_PAGE
+      ),
+    [filteredAirports, page]
   );
 
   const handlePageChange = (
