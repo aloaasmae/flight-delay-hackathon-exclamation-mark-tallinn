@@ -34,6 +34,30 @@ type PredictResult = {
   confidence: number
 }
 
+// 20% (0.20) = green, 22.5% (0.225) = yellow, 25% (0.25) = red
+function getDelayChanceColor(chance: number) {
+  const min = 0.20;
+  const mid = 0.225;
+  const max = 0.25;
+  const clamped = Math.max(min, Math.min(chance, max));
+
+  if (clamped <= mid) {
+    // green to yellow
+    const ratio = (clamped - min) / (mid - min); // 0 = green, 1 = yellow
+    const r = Math.round(0x4c + (0xff - 0x4c) * ratio);
+    const g = Math.round(0xaf + (0xeb - 0xaf) * ratio);
+    const b = Math.round(0x50 + (0x3b - 0x50) * ratio);
+    return `rgb(${r},${g},${b})`;
+  } else {
+    // yellow to red
+    const ratio = (clamped - mid) / (max - mid); // 0 = yellow, 1 = red
+    const r = Math.round(0xff + (0xf4 - 0xff) * ratio);
+    const g = Math.round(0xeb + (0x43 - 0xeb) * ratio);
+    const b = Math.round(0x3b + (0x36 - 0x3b) * ratio);
+    return `rgb(${r},${g},${b})`;
+  }
+}
+
 function PredictCell({ dayIndex, airportId }: { dayIndex: number; airportId: number }) {
   const [hovered, setHovered] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -99,8 +123,17 @@ function PredictCell({ dayIndex, airportId }: { dayIndex: number; airportId: num
       ) : error ? (
         <Typography color="error" variant="body2">{error}</Typography>
       ) : result ? (
-        <Box>
-          <Typography variant="body2" color="primary">
+        <Box
+          className="delay-chance-cell"
+          sx={{
+            background: getDelayChanceColor(result.delayChance),
+            borderRadius: 1,
+            px: 1,
+            py: 0.5,
+            display: 'inline-block',
+          }}
+        >
+          <Typography variant="body2" color="primary" sx={{ color: '#222', fontWeight: 700 }}>
             Delay chance: {(result.delayChance * 100).toFixed(1)}%
           </Typography>
         </Box>

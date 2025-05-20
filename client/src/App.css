@@ -106,3 +106,12 @@
   background: #e6f7ff;
   transition: background 0.2s;
 }
+
+/* Add background color for delay chance cell based on value */
+.delay-chance-cell {
+  color: #222;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+/* The background color will be set inline from React using style attribute */
