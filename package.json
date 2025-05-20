@@ -20,7 +20,10 @@
     "@fastify/swagger-ui": "^2.0.0",
     "@fastify/cors": "^8.4.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "@mui/material": "^5.15.15",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
