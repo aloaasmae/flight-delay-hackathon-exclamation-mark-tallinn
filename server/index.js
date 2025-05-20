@@ -3,6 +3,7 @@
 import fastifyModule from 'fastify';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
+import fastifyCors from '@fastify/cors';
 import healthRoutes from './routes/health.js';
 import predictRoutes from './routes/predict.js';
 import airportsRoutes from './routes/airports.js';
@@ -10,6 +11,11 @@ import airportsRoutes from './routes/airports.js';
 const fastify = fastifyModule({ logger: true });
 
 (async () => {
+  await fastify.register(fastifyCors, {
+    origin: true, // Allow all origins, or set to your frontend URL for more security
+    methods: ['GET', 'POST', 'OPTIONS'],
+  });
+
   await fastify.register(fastifySwagger, {
     openapi: {
       info: {
