@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import LoginPage from './LoginPage'
 import {
   Box,
   Card,
@@ -13,7 +14,9 @@ import {
   Button,
   CircularProgress,
   Paper,
-  Tooltip
+  Tooltip,
+  Pagination,
+  TextField
 } from '@mui/material'
 import './App.css'
 
@@ -144,12 +147,28 @@ function PredictCell({ dayIndex, airportId }: { dayIndex: number; airportId: num
   )
 }
 
+const AIRPORTS_PER_PAGE = 5
+
 function App() {
   const [airports, setAirports] = useState<Airport[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
+  const [filter, setFilter] = useState('')
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  // Dummy login logic for demonstration
+  const handleLogin = async (username: string, password: string) => {
+    // Replace with real authentication if needed
+    if (username === 'user' && password === 'password') {
+      setLoggedIn(true)
+      return true
+    }
+    return false
+  }
 
   useEffect(() => {
+    if (!loggedIn) return
     fetch('http://localhost:3000/airports', { mode: 'cors' })
       .then(async res => {
         if (!res.ok) throw new Error('Failed to fetch airports')
@@ -168,12 +187,35 @@ function App() {
         setError(err.message)
         setLoading(false)
       })
-  }, [])
+  }, [loggedIn])
 
   // Set a funny pun as the page title
   useEffect(() => {
     document.title = "Cloudy With a Chance of Delays";
   }, []);
+
+  // Filter airports by name (case-insensitive)
+  const filteredAirports = airports.filter(a =>
+    a.name.toLowerCase().includes(filter.toLowerCase())
+  )
+  const totalPages = Math.ceil(filteredAirports.length / AIRPORTS_PER_PAGE)
+  const pagedAirports = filteredAirports.slice(
+    (page - 1) * AIRPORTS_PER_PAGE,
+    page * AIRPORTS_PER_PAGE
+  )
+
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
+  }
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value)
+    setPage(1)
+  }
+
+  if (!loggedIn) {
+    return <LoginPage onLogin={handleLogin} />
+  }
 
   return (
     <Box className="kartulilennuk-root" sx={{ bgcolor: '#f5f7fa', minHeight: '100vh', py: 4 }}>
@@ -212,35 +254,59 @@ function App() {
             <Typography variant="body2">
               Below is a table where each row is a day of the week and each column is an airport.
               Hover over a button in the table to see the predicted chance of flight delay for that day and airport.
+              Use the pagination below the table to see more airports.
             </Typography>
+          </Box>
+          <Box mb={2} display="flex" justifyContent="center">
+            <TextField
+              label="Filter airports"
+              variant="outlined"
+              size="small"
+              value={filter}
+              onChange={handleFilterChange}
+              sx={{ minWidth: 250 }}
+            />
           </Box>
           {loading && <Typography>Loading airports...</Typography>}
           {error && <Typography color="error">Error: {error}</Typography>}
           {!loading && !error && (
-            <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
-              <Table className="kartulilennuk-table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Day</TableCell>
-                    {airports.map((airport) => (
-                      <TableCell key={airport.id} align="center" sx={{ fontWeight: 'bold' }}>
-                        {airport.name}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {daysOfWeek.map((day, dayIdx) => (
-                    <TableRow key={day}>
-                      <TableCell>{day}</TableCell>
-                      {airports.map((airport) => (
-                        <PredictCell key={airport.id} dayIndex={dayIdx} airportId={airport.id} />
+            <>
+              <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
+                <Table className="kartulilennuk-table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Day</TableCell>
+                      {pagedAirports.map((airport) => (
+                        <TableCell key={airport.id} align="center" sx={{ fontWeight: 'bold' }}>
+                          {airport.name}
+                        </TableCell>
                       ))}
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {daysOfWeek.map((day, dayIdx) => (
+                      <TableRow key={day}>
+                        <TableCell>{day}</TableCell>
+                        {pagedAirports.map((airport) => (
+                          <PredictCell key={airport.id} dayIndex={dayIdx} airportId={airport.id} />
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={handlePageChange}
+                  color="primary"
+                  shape="rounded"
+                  showFirstButton
+                  showLastButton
+                />
+              </Box>
+            </>
           )}
         </CardContent>
       </Card>
