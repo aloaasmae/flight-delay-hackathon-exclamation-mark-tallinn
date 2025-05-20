@@ -1,10 +1,10 @@
 import { spawn } from 'child_process';
-import path from 'path';
+import { resolve as pathResolve } from 'node:path';
 
 export function predictDelay(dayOfWeekId, airportId, logger = console) {
   logger.info({ dayOfWeekId, airportId }, 'Spawning Python process for prediction');
   return new Promise((resolve, reject) => {
-    const pythonScript = path.resolve('./server/logic/predict_delay.py');
+    const pythonScript = pathResolve(process.cwd(), 'server/logic/predict_delay.py');
     const args = [pythonScript, dayOfWeekId, airportId];
     const python = spawn('python3', args);
 
