@@ -31,3 +31,8 @@ Congratulations on completing the workshop! Over the course of these challenges 
 - GitHub Copilot can support development.
 - to provide context to GitHub Copilot to improve suggestions.
 - you need to be flexible when working with AI.
+
+
+- list of ideas
+  - video when scroll
+  - 
