@@ -133,54 +133,35 @@ button:hover {
 
 .cloud {
   position: fixed;
-  width: 140px;
-  height: 80px;
+  width: 120px;
+  height: 70px;
   background: #fff;
-  border-radius: 70px 70px 70px 70px / 45px 45px 45px 45px;
-  box-shadow: 70px 0px 0px 0px #fff, 35px 25px 0px 0px #fff, 105px 25px 0px 0px #fff;
+  border-radius: 60px 60px 60px 60px / 40px 40px 40px 40px;
+  box-shadow: 60px 0px 0px 0px #fff, 30px 20px 0px 0px #fff, 90px 20px 0px 0px #fff;
   opacity: 0.85;
   z-index: 2;
-  animation: cloud-move 12s linear infinite;
   pointer-events: none;
 }
 
-.cloud.right {
-  left: 100vw;
-  top: 20%;
-  animation-delay: 0s;
-}
-.cloud.right2 {
-  left: 100vw;
-  top: 35%;
-  animation-delay: 2s;
-}
-.cloud.right3 {
-  left: 100vw;
-  top: 50%;
-  animation-delay: 4s;
-}
+/* 10 clouds, each with unique animation, speed, direction, and vertical position */
+.cloud.c1 { left: -200px; top: 10%; animation: cloud-move-r1 13s linear infinite; animation-delay: 0s; }
+.cloud.c2 { left: 100vw; top: 20%; animation: cloud-move-l1 11s linear infinite; animation-delay: 2s; }
+.cloud.c3 { left: -200px; top: 30%; animation: cloud-move-r2 15s linear infinite; animation-delay: 4s; }
+.cloud.c4 { left: 100vw; top: 40%; animation: cloud-move-l2 17s linear infinite; animation-delay: 6s; }
+.cloud.c5 { left: -200px; top: 50%; animation: cloud-move-r3 19s linear infinite; animation-delay: 8s; }
+.cloud.c6 { left: 100vw; top: 60%; animation: cloud-move-l3 14s linear infinite; animation-delay: 10s; }
+.cloud.c7 { left: -200px; top: 70%; animation: cloud-move-r4 16s linear infinite; animation-delay: 12s; }
+.cloud.c8 { left: 100vw; top: 80%; animation: cloud-move-l4 18s linear infinite; animation-delay: 14s; }
+.cloud.c9 { left: -200px; top: 85%; animation: cloud-move-r5 20s linear infinite; animation-delay: 16s; }
+.cloud.c10 { left: 100vw; top: 5%; animation: cloud-move-l5 12s linear infinite; animation-delay: 18s; }
 
-.cloud.left {
-  left: -180px;
-  top: 60%;
-  animation-delay: 6s;
-}
-.cloud.left2 {
-  left: -130px;
-  top: 30%;
-  animation-delay: 8s;
-}
-.cloud.left3 {
-  left: -220px;
-  top: 10%;
-  animation-delay: 10s;
-}
-
-@keyframes cloud-move {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-120vw);
-  }
-}
+@keyframes cloud-move-r1 { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateX(120vw); opacity: 0; } }
+@keyframes cloud-move-l1 { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateX(-120vw); opacity: 0; } }
+@keyframes cloud-move-r2 { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateX(110vw); opacity: 0; } }
+@keyframes cloud-move-l2 { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateX(-110vw); opacity: 0; } }
+@keyframes cloud-move-r3 { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateX(130vw); opacity: 0; } }
+@keyframes cloud-move-l3 { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateX(-130vw); opacity: 0; } }
+@keyframes cloud-move-r4 { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateX(100vw); opacity: 0; } }
+@keyframes cloud-move-l4 { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateX(-100vw); opacity: 0; } }
+@keyframes cloud-move-r5 { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateX(140vw); opacity: 0; } }
+@keyframes cloud-move-l5 { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateX(-140vw); opacity: 0; } }
