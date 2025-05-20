@@ -32,7 +32,7 @@ function PredictCell({ dayIndex, airportId }: { dayIndex: number; airportId: num
     setHovered(true)
     setLoading(true)
     setError(null)
-    fetch('http://0.0.0.0:3000/predict', {
+    fetch('http://localhost:3000/predict', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       mode: 'cors',
@@ -94,7 +94,7 @@ function App() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch('http://0.0.0.0:3000/airports', { mode: 'cors' })
+    fetch('http://localhost:3000/airports', { mode: 'cors' })
       .then(async res => {
         if (!res.ok) throw new Error('Failed to fetch airports')
         const text = await res.text()
