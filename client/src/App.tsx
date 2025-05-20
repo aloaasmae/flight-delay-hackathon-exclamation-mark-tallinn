@@ -13,7 +13,8 @@ import {
   Button,
   CircularProgress,
   Paper,
-  Tooltip
+  Tooltip,
+  Pagination
 } from '@mui/material'
 import './App.css'
 
@@ -144,10 +145,13 @@ function PredictCell({ dayIndex, airportId }: { dayIndex: number; airportId: num
   )
 }
 
+const AIRPORTS_PER_PAGE = 5
+
 function App() {
   const [airports, setAirports] = useState<Airport[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     fetch('http://localhost:3000/airports', { mode: 'cors' })
@@ -174,6 +178,16 @@ function App() {
   useEffect(() => {
     document.title = "Cloudy With a Chance of Delays";
   }, []);
+
+  const totalPages = Math.ceil(airports.length / AIRPORTS_PER_PAGE)
+  const pagedAirports = airports.slice(
+    (page - 1) * AIRPORTS_PER_PAGE,
+    page * AIRPORTS_PER_PAGE
+  )
+
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
+  }
 
   return (
     <Box className="kartulilennuk-root" sx={{ bgcolor: '#f5f7fa', minHeight: '100vh', py: 4 }}>
@@ -212,35 +226,49 @@ function App() {
             <Typography variant="body2">
               Below is a table where each row is a day of the week and each column is an airport.
               Hover over a button in the table to see the predicted chance of flight delay for that day and airport.
+              Use the pagination below the table to see more airports.
             </Typography>
           </Box>
           {loading && <Typography>Loading airports...</Typography>}
           {error && <Typography color="error">Error: {error}</Typography>}
           {!loading && !error && (
-            <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
-              <Table className="kartulilennuk-table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Day</TableCell>
-                    {airports.map((airport) => (
-                      <TableCell key={airport.id} align="center" sx={{ fontWeight: 'bold' }}>
-                        {airport.name}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {daysOfWeek.map((day, dayIdx) => (
-                    <TableRow key={day}>
-                      <TableCell>{day}</TableCell>
-                      {airports.map((airport) => (
-                        <PredictCell key={airport.id} dayIndex={dayIdx} airportId={airport.id} />
+            <>
+              <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
+                <Table className="kartulilennuk-table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Day</TableCell>
+                      {pagedAirports.map((airport) => (
+                        <TableCell key={airport.id} align="center" sx={{ fontWeight: 'bold' }}>
+                          {airport.name}
+                        </TableCell>
                       ))}
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {daysOfWeek.map((day, dayIdx) => (
+                      <TableRow key={day}>
+                        <TableCell>{day}</TableCell>
+                        {pagedAirports.map((airport) => (
+                          <PredictCell key={airport.id} dayIndex={dayIdx} airportId={airport.id} />
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={handlePageChange}
+                  color="primary"
+                  shape="rounded"
+                  showFirstButton
+                  showLastButton
+                />
+              </Box>
+            </>
           )}
         </CardContent>
       </Card>
