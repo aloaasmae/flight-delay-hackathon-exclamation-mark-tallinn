@@ -2,12 +2,11 @@
 
 ## Usage
 
-1. Start the backend API server (see backend instructions).
-2. Start the frontend app:
-
+Start the backend server and the frontend server.:
    ```
+   nvm use
    npm install
-   npm start
+   npm run start:all
    ```
 
 3. Open [http://localhost:3000](http://localhost:3000) in your browser.
