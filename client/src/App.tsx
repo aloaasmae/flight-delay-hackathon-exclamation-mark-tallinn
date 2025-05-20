@@ -137,10 +137,15 @@ function App() {
       })
   }, [])
 
+  // Set a funny pun as the page title
+  useEffect(() => {
+    document.title = "Cloudy With a Chance of Delays";
+  }, []);
+
   return (
     <Box className="kartulilennuk-root" sx={{ bgcolor: '#f5f7fa', minHeight: '100vh', py: 4 }}>
       <Typography className="kartulilennuk-title" variant="h3" gutterBottom>
-        kartulilennuk
+          Cloudy With a Chance of Delays
       </Typography>
       <Card className="kartulilennuk-card" sx={{ maxWidth: 900, mx: 'auto', p: 3 }}>
         <Box
