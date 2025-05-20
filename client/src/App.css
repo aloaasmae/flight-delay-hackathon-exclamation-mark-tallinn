@@ -274,3 +274,23 @@ button:hover {
     filter: blur(4px);
   }
 }
+
+.hover-counter-sticky {
+  position: fixed;
+  top: 24px;
+  right: 32px;
+  z-index: 3000;
+  background: #fff5e1;
+  color: #8b4513;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(139,69,19,0.10);
+  padding: 0.7em 1.5em;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border: 2px solid #e0e7ef;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}

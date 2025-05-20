@@ -395,6 +395,11 @@ function App() {
     }, duration * 1000);
   };
 
+  // Add hovers when a plane is destroyed
+  const handlePlaneDestroyed = () => {
+    setHoverViews((v) => v + 3); // Add 3 hovers per destroyed plane
+  };
+
   // Handle plane click for explosion
   const handlePlaneClick = (planeId: number) => {
     setPlanes((prev) =>
@@ -404,6 +409,7 @@ function App() {
     );
     setTimeout(() => {
       setPlanes((prev) => prev.filter((p) => p.id !== planeId));
+      handlePlaneDestroyed();
     }, 700); // match explosion animation duration
   };
 
@@ -470,6 +476,11 @@ function App() {
         paddingBottom: "32px",
       }}
     >
+      {/* Sticky hover counter */}
+      <div className="hover-counter-sticky">
+        <span role="img" aria-label="eye">👁️</span>{" "}
+        <b>{hoverViews}</b> hover{hoverViews === 1 ? "" : "s"} left
+      </div>
       {/* Clouds as background elements */}
       <div className="cloud c1" style={{ zIndex: 0 }} />
       <div className="cloud c2" style={{ zIndex: 0 }} />
