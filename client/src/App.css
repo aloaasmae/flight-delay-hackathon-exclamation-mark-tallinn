@@ -40,3 +40,69 @@
 .read-the-docs {
   color: #888;
 }
+
+.kartulilennuk-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.kartulilennuk-title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+  color: #222; /* darker for better contrast */
+}
+
+.kartulilennuk-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 520px;
+  margin: 0 auto;
+  color: #222; /* ensure dark text */
+}
+
+.kartulilennuk-plane {
+  width: 320px;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.kartulilennuk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.1rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  overflow: hidden;
+  color: #222; /* ensure table text is dark */
+}
+
+.kartulilennuk-table th,
+.kartulilennuk-table td {
+  padding: 0.75em 1.1em;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  color: #222; /* ensure table cell text is dark */
+}
+
+.kartulilennuk-table th {
+  background: #e0e7ef;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.kartulilennuk-table tr:last-child td {
+  border-bottom: none;
+}
+
+.kartulilennuk-table tbody tr:hover {
+  background: #e6f7ff;
+  transition: background 0.2s;
+}
