@@ -9,7 +9,29 @@ type PaywallDialogProps = {
 export default function PaywallDialog({ open, onClose, onBuyMore }: PaywallDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Paywall</DialogTitle>
+      <DialogTitle
+        sx={{
+          textAlign: "center",
+          fontWeight: 900,
+          fontSize: "2rem",
+          letterSpacing: 2,
+          background: "linear-gradient(90deg, #ff0080, #7928ca, #00bfff, #ff8c00, #ff0080)",
+          backgroundClip: "text",
+          WebkitBackgroundClip: "text",
+          color: "transparent",
+          WebkitTextFillColor: "transparent",
+          animation: "paywall-title-rainbow 2s linear infinite",
+          "@keyframes paywall-title-rainbow": {
+            "0%": { backgroundPosition: "0% 50%" },
+            "100%": { backgroundPosition: "100% 50%" }
+          },
+          backgroundSize: "200% 200%",
+          mb: 1,
+          userSelect: "none"
+        }}
+      >
+        🎉 Get This Best Offer Right Now! 🎉
+      </DialogTitle>
       <DialogContent>
         <Box
           sx={{
