@@ -5,6 +5,7 @@
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -14,6 +15,7 @@
     "@fastify/swagger-ui": "^2.0.0"
   },
   "devDependencies": {
-    "eslint": "^8.57.0"
+    "eslint": "^8.57.0",
+    "nodemon": "^3.0.3"
   }
 }
