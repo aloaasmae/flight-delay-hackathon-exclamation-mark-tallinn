@@ -8,12 +8,9 @@ import {
   Button,
   Alert,
   InputAdornment,
-  IconButton
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 type LoginProps = {
   onLogin: (username: string, password: string) => Promise<boolean>;
@@ -22,7 +19,6 @@ type LoginProps = {
 export default function LoginPage({ onLogin }: LoginProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
