@@ -45,33 +45,38 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: linear-gradient(
+    135deg,
+    #f7e7ce,
+    #fff5e1
+  ); /* Gingerbread ice cream gradient */
 }
 
 .kartulilennuk-title {
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
   letter-spacing: 0.05em;
-  color: #222; /* darker for better contrast */
+  color: #8b4513; /* Gingerbread brown */
 }
 
 .kartulilennuk-card {
-  background: #fff;
+  background: #fff5e1; /* Creamy ice cream */
   border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
   padding: 2rem 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 520px;
   margin: 0 auto;
-  color: #222; /* ensure dark text */
+  color: #8b4513; /* Gingerbread brown */
 }
 
 .kartulilennuk-plane {
   width: 320px;
   border-radius: 12px;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
 }
 
 .kartulilennuk-table {
@@ -93,8 +98,8 @@
 }
 
 .kartulilennuk-table th {
-  background: #e0e7ef;
-  color: #2d3748;
+  background: linear-gradient(90deg, #f4d6a0, #f7e7ce);
+  color: #8b4513; /* Gingerbread brown */
   font-weight: 600;
 }
 
@@ -103,15 +108,25 @@
 }
 
 .kartulilennuk-table tbody tr:hover {
-  background: #e6f7ff;
+  background: #f7e7ce; /* Gingerbread ice cream hover */
   transition: background 0.2s;
 }
 
 /* Add background color for delay chance cell based on value */
 .delay-chance-cell {
-  color: #222;
+  color: #8b4513; /* Gingerbread brown */
   font-weight: bold;
   transition: background 0.3s;
 }
 
 /* The background color will be set inline from React using style attribute */
+
+button {
+  background-color: #8b4513; /* Gingerbread brown */
+  color: #fff;
+  transition: background-color 0.3s, transform 0.2s;
+}
+button:hover {
+  background-color: #a0522d; /* Darker gingerbread */
+  transform: scale(1.05);
+}
