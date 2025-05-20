@@ -1,18 +1,26 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
+const daysOfWeek = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+]
+
 function App() {
-  const [airports, setAirports] = useState([])
+  const [airports, setAirports] = useState<{ id: number; name: string }[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('http://0.0.0.0:3000/airports', { mode: 'cors' })
       .then(async res => {
-        console.log(res)
         if (!res.ok) throw new Error('Failed to fetch airports')
         const text = await res.text()
-        console.log(text)
         try {
           return JSON.parse(text)
         } catch {
@@ -44,15 +52,19 @@ function App() {
           <table className="kartulilennuk-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Name</th>
+                <th>Day</th>
+                {airports.map((airport) => (
+                  <th key={airport.id}>{airport.name}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {airports.map((airport: { id: number; name: string }) => (
-                <tr key={airport.id}>
-                  <td>{airport.id}</td>
-                  <td>{airport.name}</td>
+              {daysOfWeek.map((day) => (
+                <tr key={day}>
+                  <td>{day}</td>
+                  {airports.map((airport) => (
+                    <td key={airport.id}></td>
+                  ))}
                 </tr>
               ))}
             </tbody>
