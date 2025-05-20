@@ -20,6 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import "./App.css";
 import LoginPage from "./LoginPage";
+import PaywallDialog from "./PaywallDialog";
 
 const daysOfWeek = [
   "Monday",
@@ -65,17 +66,24 @@ function getDelayChanceColor(chance: number) {
 function PredictCell({
   dayIndex,
   airportId,
+  canHover,
+  onHoverAttempt,
 }: {
   dayIndex: number;
   airportId: number;
+  canHover: boolean;
+  onHoverAttempt: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<PredictResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Use onMouseEnter/onMouseLeave directly on the TableCell for reliable hover
   const handleMouseEnter = () => {
+    if (!canHover) {
+      onHoverAttempt();
+      return;
+    }
     setHovered(true);
     if (!result && !loading) {
       setLoading(true);
@@ -102,6 +110,7 @@ function PredictCell({
           setLoading(false);
         });
     }
+    onHoverAttempt();
   };
 
   const handleMouseLeave = () => {
@@ -210,6 +219,10 @@ function App() {
   const [filter, setFilter] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
 
+  // Paywall state
+  const [hoverViews, setHoverViews] = useState(1); // 1 free view
+  const [paywallOpen, setPaywallOpen] = useState(false);
+
   // Dummy login logic for demonstration
   const handleLogin = async () => {
     setLoggedIn(true);
@@ -263,6 +276,20 @@ function App() {
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value);
     setPage(1);
+  };
+
+  // Paywall logic
+  const canHover = hoverViews > 0;
+  const handleHoverAttempt = () => {
+    if (hoverViews > 0) {
+      setHoverViews((v) => v - 1);
+    } else {
+      setPaywallOpen(true);
+    }
+  };
+  const handleBuyMore = () => {
+    setHoverViews((v) => v + 5);
+    setPaywallOpen(false);
   };
 
   if (!loggedIn) {
@@ -367,9 +394,11 @@ function App() {
                         <TableCell>{day}</TableCell>
                         {pagedAirports.map((airport) => (
                           <PredictCell
-                            key={airport.id}
+                            key={airport.id + "-" + dayIdx}
                             dayIndex={dayIdx}
                             airportId={airport.id}
+                            canHover={canHover}
+                            onHoverAttempt={handleHoverAttempt}
                           />
                         ))}
                       </TableRow>
@@ -390,6 +419,11 @@ function App() {
               </Box>
             </>
           )}
+          <PaywallDialog
+            open={paywallOpen}
+            onClose={() => setPaywallOpen(false)}
+            onBuyMore={handleBuyMore}
+          />
         </CardContent>
       </Card>
     </Box>
