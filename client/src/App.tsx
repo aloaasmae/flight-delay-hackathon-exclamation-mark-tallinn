@@ -1,45 +1,45 @@
-import { useEffect, useState } from 'react'
-import LoginPage from './LoginPage'
 import {
   Box,
+  Button,
   Card,
   CardContent,
-  Typography,
+  CircularProgress,
+  Pagination,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Button,
-  CircularProgress,
-  Paper,
+  TextField,
   Tooltip,
-  Pagination,
-  TextField
-} from '@mui/material'
-import './App.css'
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import "./App.css";
+import LoginPage from "./LoginPage";
 
 const daysOfWeek = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday'
-]
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
-type Airport = { id: number; name: string }
+type Airport = { id: number; name: string };
 
 type PredictResult = {
-  delayChance: number
-  confidence: number
-}
+  delayChance: number;
+  confidence: number;
+};
 
 // 20% (0.20) = green, 22.5% (0.225) = yellow, 25% (0.25) = red
 function getDelayChanceColor(chance: number) {
-  const min = 0.20;
+  const min = 0.2;
   const mid = 0.225;
   const max = 0.25;
   const clamped = Math.max(min, Math.min(chance, max));
@@ -61,50 +61,56 @@ function getDelayChanceColor(chance: number) {
   }
 }
 
-function PredictCell({ dayIndex, airportId }: { dayIndex: number; airportId: number }) {
-  const [hovered, setHovered] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<PredictResult | null>(null)
-  const [error, setError] = useState<string | null>(null)
+function PredictCell({
+  dayIndex,
+  airportId,
+}: {
+  dayIndex: number;
+  airportId: number;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<PredictResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Use onMouseEnter/onMouseLeave directly on the TableCell for reliable hover
   const handleMouseEnter = () => {
-    setHovered(true)
+    setHovered(true);
     if (!result && !loading) {
-      setLoading(true)
-      setError(null)
-      fetch('http://0.0.0.0:3000/predict', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'cors',
+      setLoading(true);
+      setError(null);
+      fetch("http://0.0.0.0:3000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        mode: "cors",
         body: JSON.stringify({
           dayOfWeekId: dayIndex + 1,
-          airportId
-        })
+          airportId,
+        }),
       })
-        .then(async res => {
-          if (!res.ok) throw new Error('Failed to fetch prediction')
-          return res.json()
+        .then(async (res) => {
+          if (!res.ok) throw new Error("Failed to fetch prediction");
+          return res.json();
         })
-        .then(data => {
-          setResult(data)
-          setLoading(false)
+        .then((data) => {
+          setResult(data);
+          setLoading(false);
         })
         .catch(() => {
-          setError('Error')
-          setLoading(false)
-        })
+          setError("Error");
+          setLoading(false);
+        });
     }
-  }
+  };
 
   const handleMouseLeave = () => {
-    setHovered(false)
-  }
+    setHovered(false);
+  };
 
   return (
     <TableCell
       align="center"
-      sx={{ position: 'relative', minWidth: 120 }}
+      sx={{ position: "relative", minWidth: 120 }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -120,11 +126,18 @@ function PredictCell({ dayIndex, airportId }: { dayIndex: number; airportId: num
           </Button>
         </Tooltip>
       ) : loading ? (
-        <Box display="flex" alignItems="center" justifyContent="center" height={40}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height={40}
+        >
           <CircularProgress size={20} />
         </Box>
       ) : error ? (
-        <Typography color="error" variant="body2">{error}</Typography>
+        <Typography color="error" variant="body2">
+          {error}
+        </Typography>
       ) : result ? (
         <Box
           className="delay-chance-cell"
@@ -133,10 +146,14 @@ function PredictCell({ dayIndex, airportId }: { dayIndex: number; airportId: num
             borderRadius: 1,
             px: 1,
             py: 0.5,
-            display: 'inline-block',
+            display: "inline-block",
           }}
         >
-          <Typography variant="body2" color="primary" sx={{ color: '#222', fontWeight: 700 }}>
+          <Typography
+            variant="body2"
+            color="primary"
+            sx={{ color: "#222", fontWeight: 700 }}
+          >
             Delay chance: {(result.delayChance * 100).toFixed(1)}%
           </Typography>
         </Box>
@@ -144,50 +161,50 @@ function PredictCell({ dayIndex, airportId }: { dayIndex: number; airportId: num
         <span>...</span>
       )}
     </TableCell>
-  )
+  );
 }
 
-const AIRPORTS_PER_PAGE = 5
+const AIRPORTS_PER_PAGE = 5;
 
 function App() {
-  const [airports, setAirports] = useState<Airport[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [page, setPage] = useState(1)
-  const [filter, setFilter] = useState('')
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [airports, setAirports] = useState<Airport[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [filter, setFilter] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
 
   // Dummy login logic for demonstration
   const handleLogin = async (username: string, password: string) => {
     // Replace with real authentication if needed
-    if (username === 'user' && password === 'password') {
-      setLoggedIn(true)
-      return true
+    if (username === "user" && password === "password") {
+      setLoggedIn(true);
+      return true;
     }
-    return false
-  }
+    return false;
+  };
 
   useEffect(() => {
-    if (!loggedIn) return
-    fetch('http://localhost:3000/airports', { mode: 'cors' })
-      .then(async res => {
-        if (!res.ok) throw new Error('Failed to fetch airports')
-        const text = await res.text()
+    if (!loggedIn) return;
+    fetch("http://localhost:3000/airports", { mode: "cors" })
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Failed to fetch airports");
+        const text = await res.text();
         try {
-          return JSON.parse(text)
+          return JSON.parse(text);
         } catch {
-          throw new Error('Received invalid data from server')
+          throw new Error("Received invalid data from server");
         }
       })
-      .then(data => {
-        setAirports(data)
-        setLoading(false)
+      .then((data) => {
+        setAirports(data);
+        setLoading(false);
       })
-      .catch(err => {
-        setError(err.message)
-        setLoading(false)
-      })
-  }, [loggedIn])
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [loggedIn]);
 
   // Set a funny pun as the page title
   useEffect(() => {
@@ -195,34 +212,43 @@ function App() {
   }, []);
 
   // Filter airports by name (case-insensitive)
-  const filteredAirports = airports.filter(a =>
+  const filteredAirports = airports.filter((a) =>
     a.name.toLowerCase().includes(filter.toLowerCase())
-  )
-  const totalPages = Math.ceil(filteredAirports.length / AIRPORTS_PER_PAGE)
+  );
+  const totalPages = Math.ceil(filteredAirports.length / AIRPORTS_PER_PAGE);
   const pagedAirports = filteredAirports.slice(
     (page - 1) * AIRPORTS_PER_PAGE,
     page * AIRPORTS_PER_PAGE
-  )
+  );
 
-  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value)
-  }
+  const handlePageChange = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+  };
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(e.target.value)
-    setPage(1)
-  }
+    setFilter(e.target.value);
+    setPage(1);
+  };
 
   if (!loggedIn) {
-    return <LoginPage onLogin={handleLogin} />
+    return <LoginPage onLogin={handleLogin} />;
   }
 
   return (
-    <Box className="kartulilennuk-root" sx={{ bgcolor: '#f5f7fa', minHeight: '100vh', py: 4 }}>
+    <Box
+      className="kartulilennuk-root"
+      sx={{ bgcolor: "#f5f7fa", minHeight: "100vh", py: 4 }}
+    >
       <Typography className="kartulilennuk-title" variant="h3" gutterBottom>
-          Cloudy With a Chance of Delays
+        Cloudy With a Chance of Delays
       </Typography>
-      <Card className="kartulilennuk-card" sx={{ maxWidth: 900, mx: 'auto', p: 3 }}>
+      <Card
+        className="kartulilennuk-card"
+        sx={{ maxWidth: 900, mx: "auto", p: 3 }}
+      >
         <Box
           component="img"
           src="https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=600&q=80"
@@ -232,29 +258,30 @@ function App() {
             width: 320,
             borderRadius: 2,
             mb: 3,
-            boxShadow: 2
+            boxShadow: 2,
           }}
         />
-        <CardContent sx={{ width: '100%', pb: 0 }}>
+        <CardContent sx={{ width: "100%", pb: 0 }}>
           <Box
             sx={{
-              background: '#e0e7ef',
-              color: '#222',
+              background: "#e0e7ef",
+              color: "#222",
               borderRadius: 2,
               p: 2,
               mb: 3,
               maxWidth: 600,
-              textAlign: 'left',
-              mx: 'auto'
+              textAlign: "left",
+              mx: "auto",
             }}
           >
             <Typography variant="subtitle1" fontWeight="bold">
               How to use:
             </Typography>
             <Typography variant="body2">
-              Below is a table where each row is a day of the week and each column is an airport.
-              Hover over a button in the table to see the predicted chance of flight delay for that day and airport.
-              Use the pagination below the table to see more airports.
+              Below is a table where each row is a day of the week and each
+              column is an airport. Hover over a button in the table to see the
+              predicted chance of flight delay for that day and airport. Use the
+              pagination below the table to see more airports.
             </Typography>
           </Box>
           <Box mb={2} display="flex" justifyContent="center">
@@ -265,6 +292,17 @@ function App() {
               value={filter}
               onChange={handleFilterChange}
               sx={{ minWidth: 250 }}
+              InputProps={{
+                endAdornment: filter && (
+                  <Button
+                    onClick={() => setFilter("")}
+                    size="small"
+                    sx={{ minWidth: 0, padding: 0 }}
+                  >
+                    Clear
+                  </Button>
+                ),
+              }}
             />
           </Box>
           {loading && <Typography>Loading airports...</Typography>}
@@ -275,9 +313,13 @@ function App() {
                 <Table className="kartulilennuk-table">
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Day</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Day</TableCell>
                       {pagedAirports.map((airport) => (
-                        <TableCell key={airport.id} align="center" sx={{ fontWeight: 'bold' }}>
+                        <TableCell
+                          key={airport.id}
+                          align="center"
+                          sx={{ fontWeight: "bold" }}
+                        >
                           {airport.name}
                         </TableCell>
                       ))}
@@ -288,7 +330,11 @@ function App() {
                       <TableRow key={day}>
                         <TableCell>{day}</TableCell>
                         {pagedAirports.map((airport) => (
-                          <PredictCell key={airport.id} dayIndex={dayIdx} airportId={airport.id} />
+                          <PredictCell
+                            key={airport.id}
+                            dayIndex={dayIdx}
+                            airportId={airport.id}
+                          />
                         ))}
                       </TableRow>
                     ))}
@@ -311,7 +357,7 @@ function App() {
         </CardContent>
       </Card>
     </Box>
-  )
+  );
 }
 
-export default App
+export default App;
