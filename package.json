@@ -1,0 +1,19 @@
+{
+  "name": "flight-delay-api",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "fastify": "^4.25.2",
+    "@sinclair/typebox": "^0.30.0",
+    "@fastify/swagger": "^8.10.0",
+    "@fastify/swagger-ui": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  }
+}
