@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #8b4513; /* Gingerbread brown */
+  background-color: #f7e7ce; /* Gingerbread ice cream base */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -56,8 +56,8 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: #8b4513; /* Gingerbread brown */
+    background-color: #fff5e1; /* Creamy ice cream */
   }
   a:hover {
     color: #747bff;
@@ -65,5 +65,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-
 }
