@@ -1,0 +1,282 @@
+[
+  {
+    "originAirportId": 15304,
+    "originAirportName": "Tampa International"
+  },
+  {
+    "originAirportId": 14122,
+    "originAirportName": "Pittsburgh International"
+  },
+  {
+    "originAirportId": 14747,
+    "originAirportName": "Seattle/Tacoma International"
+  },
+  {
+    "originAirportId": 13930,
+    "originAirportName": "Chicago O'Hare International"
+  },
+  {
+    "originAirportId": 13931,
+    "originAirportName": "Norfolk International"
+  },
+  {
+    "originAirportId": 12478,
+    "originAirportName": "John F. Kennedy International"
+  },
+  {
+    "originAirportId": 13796,
+    "originAirportName": "Metropolitan Oakland International"
+  },
+  {
+    "originAirportId": 12264,
+    "originAirportName": "Washington Dulles International"
+  },
+  {
+    "originAirportId": 12892,
+    "originAirportName": "Los Angeles International"
+  },
+  {
+    "originAirportId": 13204,
+    "originAirportName": "Orlando International"
+  },
+  {
+    "originAirportId": 10821,
+    "originAirportName": "Baltimore/Washington International Thurgood Marshall"
+  },
+  {
+    "originAirportId": 11298,
+    "originAirportName": "Dallas/Fort Worth International"
+  },
+  {
+    "originAirportId": 14107,
+    "originAirportName": "Phoenix Sky Harbor International"
+  },
+  {
+    "originAirportId": 11057,
+    "originAirportName": "Charlotte Douglas International"
+  },
+  {
+    "originAirportId": 12889,
+    "originAirportName": "McCarran International"
+  },
+  {
+    "originAirportId": 12191,
+    "originAirportName": "William P Hobby"
+  },
+  {
+    "originAirportId": 11292,
+    "originAirportName": "Denver International"
+  },
+  {
+    "originAirportId": 11433,
+    "originAirportName": "Detroit Metro Wayne County"
+  },
+  {
+    "originAirportId": 13871,
+    "originAirportName": "Eppley Airfield"
+  },
+  {
+    "originAirportId": 14893,
+    "originAirportName": "Sacramento International"
+  },
+  {
+    "originAirportId": 10397,
+    "originAirportName": "Hartsfield-Jackson Atlanta International"
+  },
+  {
+    "originAirportId": 14869,
+    "originAirportName": "Salt Lake City International"
+  },
+  {
+    "originAirportId": 10721,
+    "originAirportName": "Logan International"
+  },
+  {
+    "originAirportId": 14771,
+    "originAirportName": "San Francisco International"
+  },
+  {
+    "originAirportId": 12266,
+    "originAirportName": "George Bush Intercontinental/Houston"
+  },
+  {
+    "originAirportId": 14683,
+    "originAirportName": "San Antonio International"
+  },
+  {
+    "originAirportId": 13487,
+    "originAirportName": "Minneapolis-St Paul International"
+  },
+  {
+    "originAirportId": 13198,
+    "originAirportName": "Kansas City International"
+  },
+  {
+    "originAirportId": 11066,
+    "originAirportName": "Port Columbus International"
+  },
+  {
+    "originAirportId": 12953,
+    "originAirportName": "LaGuardia"
+  },
+  {
+    "originAirportId": 11618,
+    "originAirportName": "Newark Liberty International"
+  },
+  {
+    "originAirportId": 11042,
+    "originAirportName": "Cleveland-Hopkins International"
+  },
+  {
+    "originAirportId": 10693,
+    "originAirportName": "Nashville International"
+  },
+  {
+    "originAirportId": 14100,
+    "originAirportName": "Philadelphia International"
+  },
+  {
+    "originAirportId": 10529,
+    "originAirportName": "Bradley International"
+  },
+  {
+    "originAirportId": 13891,
+    "originAirportName": "Ontario International"
+  },
+  {
+    "originAirportId": 13232,
+    "originAirportName": "Chicago Midway International"
+  },
+  {
+    "originAirportId": 11259,
+    "originAirportName": "Dallas Love Field"
+  },
+  {
+    "originAirportId": 14679,
+    "originAirportName": "San Diego International"
+  },
+  {
+    "originAirportId": 14843,
+    "originAirportName": "Luis Munoz Marin International"
+  },
+  {
+    "originAirportId": 14057,
+    "originAirportName": "Portland International"
+  },
+  {
+    "originAirportId": 12954,
+    "originAirportName": "Long Beach Airport"
+  },
+  {
+    "originAirportId": 12339,
+    "originAirportName": "Indianapolis International"
+  },
+  {
+    "originAirportId": 10792,
+    "originAirportName": "Buffalo Niagara International"
+  },
+  {
+    "originAirportId": 13303,
+    "originAirportName": "Miami International"
+  },
+  {
+    "originAirportId": 14831,
+    "originAirportName": "Norman Y. Mineta San Jose International"
+  },
+  {
+    "originAirportId": 14908,
+    "originAirportName": "John Wayne Airport-Orange County"
+  },
+  {
+    "originAirportId": 11278,
+    "originAirportName": "Ronald Reagan Washington National"
+  },
+  {
+    "originAirportId": 10800,
+    "originAirportName": "Bob Hope"
+  },
+  {
+    "originAirportId": 13495,
+    "originAirportName": "Louis Armstrong New Orleans International"
+  },
+  {
+    "originAirportId": 14524,
+    "originAirportName": "Richmond International"
+  },
+  {
+    "originAirportId": 11697,
+    "originAirportName": "Fort Lauderdale-Hollywood International"
+  },
+  {
+    "originAirportId": 14730,
+    "originAirportName": "Louisville International-Standiford Field"
+  },
+  {
+    "originAirportId": 13342,
+    "originAirportName": "General Mitchell International"
+  },
+  {
+    "originAirportId": 14570,
+    "originAirportName": "Reno/Tahoe International"
+  },
+  {
+    "originAirportId": 10423,
+    "originAirportName": "Austin - Bergstrom International"
+  },
+  {
+    "originAirportId": 15016,
+    "originAirportName": "Lambert-St. Louis International"
+  },
+  {
+    "originAirportId": 10140,
+    "originAirportName": "Albuquerque International Sunport"
+  },
+  {
+    "originAirportId": 12451,
+    "originAirportName": "Jacksonville International"
+  },
+  {
+    "originAirportId": 15376,
+    "originAirportName": "Tucson International"
+  },
+  {
+    "originAirportId": 14307,
+    "originAirportName": "Theodore Francis Green State"
+  },
+  {
+    "originAirportId": 10299,
+    "originAirportName": "Ted Stevens Anchorage International"
+  },
+  {
+    "originAirportId": 13851,
+    "originAirportName": "Will Rogers World"
+  },
+  {
+    "originAirportId": 12173,
+    "originAirportName": "Honolulu International"
+  },
+  {
+    "originAirportId": 11193,
+    "originAirportName": "Cincinnati/Northern Kentucky International"
+  },
+  {
+    "originAirportId": 14027,
+    "originAirportName": "Palm Beach International"
+  },
+  {
+    "originAirportId": 14492,
+    "originAirportName": "Raleigh-Durham International"
+  },
+  {
+    "originAirportId": 14635,
+    "originAirportName": "Southwest Florida International"
+  },
+  {
+    "originAirportId": 13244,
+    "originAirportName": "Memphis International"
+  },
+  {
+    "originAirportId": 13830,
+    "originAirportName": "Kahului Airport"
+  }
+]
