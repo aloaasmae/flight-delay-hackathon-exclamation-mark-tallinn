@@ -16,7 +16,6 @@ function predictFromJson(model, input) {
 }
 
 export default function (fastify, opts, done) {
-  fastify.log.info('Registering /predict route');
   fastify.post('/predict', {
     schema: {
       body: PredictRequestSchema,
