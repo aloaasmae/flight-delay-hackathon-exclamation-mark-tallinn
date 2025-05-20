@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import LoginPage from './LoginPage'
 import {
   Box,
   Card,
@@ -154,8 +155,20 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [filter, setFilter] = useState('')
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  // Dummy login logic for demonstration
+  const handleLogin = async (username: string, password: string) => {
+    // Replace with real authentication if needed
+    if (username === 'user' && password === 'password') {
+      setLoggedIn(true)
+      return true
+    }
+    return false
+  }
 
   useEffect(() => {
+    if (!loggedIn) return
     fetch('http://localhost:3000/airports', { mode: 'cors' })
       .then(async res => {
         if (!res.ok) throw new Error('Failed to fetch airports')
@@ -174,7 +187,7 @@ function App() {
         setError(err.message)
         setLoading(false)
       })
-  }, [])
+  }, [loggedIn])
 
   // Set a funny pun as the page title
   useEffect(() => {
@@ -198,6 +211,10 @@ function App() {
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value)
     setPage(1)
+  }
+
+  if (!loggedIn) {
+    return <LoginPage onLogin={handleLogin} />
   }
 
   return (
