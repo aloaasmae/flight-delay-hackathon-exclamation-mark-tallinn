@@ -2,7 +2,6 @@ import { predictDelay } from '../logic/predict.js';
 
 export async function predict(request, reply) {
   reply.type('application/json');
-  // Defensive: handle missing or empty body gracefully
   if (!request.body || typeof request.body !== 'object') {
     request.log.warn('Empty or invalid JSON body');
     reply.code(400);
