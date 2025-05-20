@@ -130,3 +130,57 @@ button:hover {
   background-color: #a0522d; /* Darker gingerbread */
   transform: scale(1.05);
 }
+
+.cloud {
+  position: fixed;
+  width: 140px;
+  height: 80px;
+  background: #fff;
+  border-radius: 70px 70px 70px 70px / 45px 45px 45px 45px;
+  box-shadow: 70px 0px 0px 0px #fff, 35px 25px 0px 0px #fff, 105px 25px 0px 0px #fff;
+  opacity: 0.85;
+  z-index: 2;
+  animation: cloud-move 12s linear infinite;
+  pointer-events: none;
+}
+
+.cloud.right {
+  left: 100vw;
+  top: 20%;
+  animation-delay: 0s;
+}
+.cloud.right2 {
+  left: 100vw;
+  top: 35%;
+  animation-delay: 2s;
+}
+.cloud.right3 {
+  left: 100vw;
+  top: 50%;
+  animation-delay: 4s;
+}
+
+.cloud.left {
+  left: -180px;
+  top: 60%;
+  animation-delay: 6s;
+}
+.cloud.left2 {
+  left: -130px;
+  top: 30%;
+  animation-delay: 8s;
+}
+.cloud.left3 {
+  left: -220px;
+  top: 10%;
+  animation-delay: 10s;
+}
+
+@keyframes cloud-move {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-120vw);
+  }
+}
