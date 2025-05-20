@@ -6,6 +6,7 @@ import {
   CircularProgress,
   Pagination,
   Paper,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -164,6 +165,41 @@ function PredictCell({
   );
 }
 
+function SkeletonTable({ columns = 5, rows = 7 }: { columns?: number; rows?: number }) {
+  return (
+    <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold" }}>
+              <Skeleton width={60} />
+            </TableCell>
+            {Array.from({ length: columns }).map((_, idx) => (
+              <TableCell key={idx} align="center" sx={{ fontWeight: "bold" }}>
+                <Skeleton width={100} />
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {Array.from({ length: rows }).map((_, rowIdx) => (
+            <TableRow key={rowIdx}>
+              <TableCell>
+                <Skeleton width={80} />
+              </TableCell>
+              {Array.from({ length: columns }).map((_, colIdx) => (
+                <TableCell key={colIdx} align="center">
+                  <Skeleton variant="rectangular" width={80} height={32} />
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
 const AIRPORTS_PER_PAGE = 5;
 
 function App() {
@@ -175,13 +211,9 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   // Dummy login logic for demonstration
-  const handleLogin = async (username: string, password: string) => {
-    // Replace with real authentication if needed
-    if (username === "user" && password === "password") {
-      setLoggedIn(true);
-      return true;
-    }
-    return false;
+  const handleLogin = async () => {
+    setLoggedIn(true);
+    return true;
   };
 
   useEffect(() => {
@@ -305,7 +337,11 @@ function App() {
               }}
             />
           </Box>
-          {loading && <Typography>Loading airports...</Typography>}
+          {loading && (
+            <Box>
+              <SkeletonTable columns={AIRPORTS_PER_PAGE} rows={daysOfWeek.length} />
+            </Box>
+          )}
           {error && <Typography color="error">Error: {error}</Typography>}
           {!loading && !error && (
             <>

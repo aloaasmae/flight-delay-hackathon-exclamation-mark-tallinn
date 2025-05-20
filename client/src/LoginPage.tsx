@@ -75,7 +75,6 @@ export default function LoginPage({ onLogin }: LoginProps) {
               fullWidth
               margin="normal"
               autoFocus
-              required
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -96,7 +95,6 @@ export default function LoginPage({ onLogin }: LoginProps) {
               onChange={e => setPassword(e.target.value)}
               fullWidth
               margin="normal"
-              required
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
