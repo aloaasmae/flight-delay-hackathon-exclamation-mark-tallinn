@@ -11,8 +11,85 @@ const daysOfWeek = [
   'Sunday'
 ]
 
+type Airport = { id: number; name: string }
+
+type PredictResult = {
+  delayChance: number
+  confidence: number
+}
+
+function PredictCell({ dayIndex, airportId }: { dayIndex: number; airportId: number }) {
+  const [hovered, setHovered] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<PredictResult | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleMouseEnter = () => {
+    if (result || loading) {
+      setHovered(true)
+      return
+    }
+    setHovered(true)
+    setLoading(true)
+    setError(null)
+    fetch('http://0.0.0.0:3000/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'cors',
+      body: JSON.stringify({
+        dayOfWeekId: dayIndex + 1,
+        airportId
+      })
+    })
+      .then(async res => {
+        if (!res.ok) throw new Error('Failed to fetch prediction')
+        return res.json()
+      })
+      .then(data => {
+        setResult(data)
+        setLoading(false)
+      })
+      .catch(err => {
+        setError('Error')
+        setLoading(false)
+      })
+  }
+
+  const handleMouseLeave = () => {
+    setHovered(false)
+  }
+
+  return (
+    <td>
+      {!hovered ? (
+        <button
+          style={{ width: '100%', cursor: 'pointer' }}
+          onMouseEnter={handleMouseEnter}
+        >
+          hover
+        </button>
+      ) : loading ? (
+        <span>Loading...</span>
+      ) : error ? (
+        <span style={{ color: 'red' }}>{error}</span>
+      ) : result ? (
+        <span>
+          Delay chance: {(result.delayChance * 100).toFixed(1)}%
+        </span>
+      ) : (
+        <span>...</span>
+      )}
+      {/* Reset cell on mouse leave */}
+      <div
+        style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}
+        onMouseLeave={handleMouseLeave}
+      />
+    </td>
+  )
+}
+
 function App() {
-  const [airports, setAirports] = useState<{ id: number; name: string }[]>([])
+  const [airports, setAirports] = useState<Airport[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -46,6 +123,19 @@ function App() {
           alt="Tartu City"
           className="kartulilennuk-plane"
         />
+        <div
+          style={{
+            background: '#e0e7ef',
+            color: '#222',
+            borderRadius: 8,
+            padding: '1em',
+            marginBottom: '1.5em',
+            maxWidth: 500,
+            textAlign: 'left'
+          }}
+        >
+          <strong>How to use:</strong> Below is a table where each row is a day of the week and each column is an airport. Hover over a button in the table to see the predicted chance of flight delay for that day and airport.
+        </div>
         {loading && <div>Loading airports...</div>}
         {error && <div style={{ color: 'red' }}>Error: {error}</div>}
         {!loading && !error && (
@@ -59,11 +149,11 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {daysOfWeek.map((day) => (
+              {daysOfWeek.map((day, dayIdx) => (
                 <tr key={day}>
                   <td>{day}</td>
                   {airports.map((airport) => (
-                    <td key={airport.id}></td>
+                    <PredictCell key={airport.id} dayIndex={dayIdx} airportId={airport.id} />
                   ))}
                 </tr>
               ))}
@@ -76,3 +166,4 @@ function App() {
 }
 
 export default App
+
