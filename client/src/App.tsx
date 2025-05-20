@@ -425,7 +425,7 @@ function App() {
     }
   };
   const handleBuyMore = () => {
-    setHoverViews((v) => v + 5);
+    setHoverViews((v) => v + 15);
     setPaywallOpen(false);
   };
 
