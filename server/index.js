@@ -1,18 +1,18 @@
 // Fastify API backend base for flight delay prediction service
 
-const fastify = require('fastify')({ logger: true });
-const { Type } = require('@sinclair/typebox');
-const {
-  PredictRequestSchema,
-  PredictResponseSchema,
-  AirportsResponseSchema
-} = require('./schemas');
+import fastifyModule from 'fastify';
+import { Type } from '@sinclair/typebox';
+import { PredictRequestSchema, PredictResponseSchema, AirportsResponseSchema } from './schemas.js';
+import healthRoutes from './routes/health.js';
+import predictRoutes from './routes/predict.js';
+import airportsRoutes from './routes/airports.js';
+
+const fastify = fastifyModule({ logger: true });
 
 // Health check endpoint
-fastify.get('/health', async (request, reply) => {
-  reply.type('application/json');
-  return { status: 'ok' };
-});
+fastify.register(healthRoutes);
+fastify.register(predictRoutes);
+fastify.register(airportsRoutes);
 
 // Mock model prediction function
 function predictDelay(dayOfWeekId, airportId) {
@@ -33,36 +33,6 @@ const airports = [
   { id: 3, name: 'Copenhagen Kastrup' },
   // ...add more airports as needed...
 ];
-
-// Prediction endpoint
-fastify.post('/predict', {
-  schema: {
-    body: PredictRequestSchema,
-    response: {
-      200: PredictResponseSchema
-    }
-  }
-}, async (request, reply) => {
-  reply.type('application/json');
-  const { dayOfWeekId, airportId } = request.body;
-  const result = predictDelay(dayOfWeekId, airportId);
-  return {
-    delayChance: result.delayChance,
-    confidence: result.confidence
-  };
-});
-
-// Airports list endpoint
-fastify.get('/airports', {
-  schema: {
-    response: {
-      200: AirportsResponseSchema
-    }
-  }
-}, async (request, reply) => {
-  reply.type('application/json');
-  return airports.slice().sort((a, b) => a.name.localeCompare(b.name));
-});
 
 // Start server
 const start = async () => {
