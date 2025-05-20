@@ -14,7 +14,8 @@ import {
   CircularProgress,
   Paper,
   Tooltip,
-  Pagination
+  Pagination,
+  TextField
 } from '@mui/material'
 import './App.css'
 
@@ -152,6 +153,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [page, setPage] = useState(1)
+  const [filter, setFilter] = useState('')
 
   useEffect(() => {
     fetch('http://localhost:3000/airports', { mode: 'cors' })
@@ -179,14 +181,23 @@ function App() {
     document.title = "Cloudy With a Chance of Delays";
   }, []);
 
-  const totalPages = Math.ceil(airports.length / AIRPORTS_PER_PAGE)
-  const pagedAirports = airports.slice(
+  // Filter airports by name (case-insensitive)
+  const filteredAirports = airports.filter(a =>
+    a.name.toLowerCase().includes(filter.toLowerCase())
+  )
+  const totalPages = Math.ceil(filteredAirports.length / AIRPORTS_PER_PAGE)
+  const pagedAirports = filteredAirports.slice(
     (page - 1) * AIRPORTS_PER_PAGE,
     page * AIRPORTS_PER_PAGE
   )
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
+  }
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value)
+    setPage(1)
   }
 
   return (
@@ -228,6 +239,16 @@ function App() {
               Hover over a button in the table to see the predicted chance of flight delay for that day and airport.
               Use the pagination below the table to see more airports.
             </Typography>
+          </Box>
+          <Box mb={2} display="flex" justifyContent="center">
+            <TextField
+              label="Filter airports"
+              variant="outlined"
+              size="small"
+              value={filter}
+              onChange={handleFilterChange}
+              sx={{ minWidth: 250 }}
+            />
           </Box>
           {loading && <Typography>Loading airports...</Typography>}
           {error && <Typography color="error">Error: {error}</Typography>}
