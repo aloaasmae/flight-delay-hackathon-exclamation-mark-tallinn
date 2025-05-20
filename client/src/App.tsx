@@ -213,6 +213,99 @@ function SkeletonTable({ columns = 5, rows = 7 }: { columns?: number; rows?: num
 
 const AIRPORTS_PER_PAGE = 5;
 
+// --- Plane SVGs ---
+const planeSvgs = [
+  // Classic plane
+  (
+    <svg width="120" height="64" viewBox="0 0 120 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Fuselage */}
+      <rect x="16" y="28" width="64" height="8" rx="4" fill="#8b4513"/>
+      {/* Nose */}
+      <ellipse cx="88" cy="32" rx="12" ry="6" fill="#8b4513"/>
+      {/* Tail fin */}
+      <polygon points="16,28 8,16 16,36" fill="#8b4513"/>
+      {/* Left wing */}
+      <polygon points="40,28 20,10 44,36" fill="#a0522d"/>
+      {/* Right wing */}
+      <polygon points="40,36 20,54 44,28" fill="#a0522d"/>
+      {/* Window/cockpit */}
+      <ellipse cx="92" cy="32" rx="4" ry="2.4" fill="#fff5e1"/>
+    </svg>
+  ),
+  // Jet plane
+  (
+    <svg width="120" height="64" viewBox="0 0 120 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Main body */}
+      <rect x="20" y="28" width="60" height="8" rx="4" fill="#a0522d"/>
+      {/* Nose cone */}
+      <ellipse cx="84" cy="32" rx="10" ry="5" fill="#8b4513"/>
+      {/* Tail fin */}
+      <polygon points="20,28 12,20 20,36" fill="#8b4513"/>
+      {/* Top fin */}
+      <polygon points="28,28 32,12 36,28" fill="#8b4513"/>
+      {/* Left wing */}
+      <polygon points="44,28 28,8 48,36" fill="#deb887"/>
+      {/* Right wing */}
+      <polygon points="44,36 28,56 48,28" fill="#deb887"/>
+      {/* Cockpit */}
+      <ellipse cx="88" cy="32" rx="3" ry="1.8" fill="#fff5e1"/>
+    </svg>
+  ),
+  // Propeller plane
+  (
+    <svg width="120" height="64" viewBox="0 0 120 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Fuselage */}
+      <rect x="24" y="30" width="56" height="4" rx="2" fill="#8b4513"/>
+      {/* Nose */}
+      <ellipse cx="84" cy="32" rx="8" ry="4" fill="#a0522d"/>
+      {/* Propeller */}
+      <rect x="90" y="30" width="14" height="2" rx="1" fill="#deb887"/>
+      <rect x="96" y="26" width="2" height="12" rx="1" fill="#deb887"/>
+      {/* Tail fin */}
+      <polygon points="24,30 18,24 24,34" fill="#8b4513"/>
+      {/* Wing */}
+      <polygon points="44,30 32,12 48,34" fill="#deb887"/>
+      <polygon points="44,34 32,52 48,30" fill="#deb887"/>
+      {/* Cockpit */}
+      <ellipse cx="80" cy="32" rx="2.5" ry="1.2" fill="#fff5e1"/>
+    </svg>
+  ),
+  // Modern airliner
+  (
+    <svg width="120" height="64" viewBox="0 0 120 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Body */}
+      <rect x="18" y="29" width="70" height="6" rx="3" fill="#deb887"/>
+      {/* Nose */}
+      <ellipse cx="92" cy="32" rx="10" ry="5" fill="#8b4513"/>
+      {/* Tail fin */}
+      <polygon points="18,29 10,18 18,35" fill="#8b4513"/>
+      {/* Top fin */}
+      <polygon points="26,29 30,10 34,29" fill="#a0522d"/>
+      {/* Left wing */}
+      <polygon points="50,29 36,6 54,35" fill="#8b4513"/>
+      {/* Right wing */}
+      <polygon points="50,35 36,58 54,29" fill="#8b4513"/>
+      {/* Cockpit */}
+      <ellipse cx="96" cy="32" rx="3" ry="1.5" fill="#fff5e1"/>
+    </svg>
+  ),
+  // Cartoon plane
+  (
+    <svg width="120" height="64" viewBox="0 0 120 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Body */}
+      <ellipse cx="60" cy="32" rx="32" ry="12" fill="#a0522d"/>
+      {/* Nose */}
+      <ellipse cx="92" cy="32" rx="10" ry="8" fill="#deb887"/>
+      {/* Tail fin */}
+      <polygon points="28,32 16,20 28,44" fill="#8b4513"/>
+      {/* Wing */}
+      <ellipse cx="60" cy="44" rx="18" ry="4" fill="#fff5e1"/>
+      {/* Cockpit */}
+      <ellipse cx="80" cy="30" rx="5" ry="3" fill="#fff5e1"/>
+    </svg>
+  ),
+];
+
 function App() {
   const [airports, setAirports] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(true);
@@ -232,6 +325,7 @@ function App() {
     top: number;
     airportName: string;
     dayName: string;
+    planeType: number;
   }[]>([]);
   const planeIdRef = useRef(0);
 
@@ -281,6 +375,8 @@ function App() {
     const id = ++planeIdRef.current;
     // Random top between 10% and 40%
     const top = Math.random() * 30 + 10;
+    // Choose a random plane SVG index
+    const planeType = Math.floor(Math.random() * planeSvgs.length);
     setPlanes((prev) => [
       ...prev,
       {
@@ -289,7 +385,8 @@ function App() {
         top,
         airportName: airportName || "",
         dayName: dayName || "",
-      },
+        planeType,
+      } as typeof prev[number] & { planeType: number }
     ]);
     setTimeout(() => {
       setPlanes((prev) => prev.filter((plane) => plane.id !== id));
@@ -373,24 +470,11 @@ function App() {
             pointerEvents: "none",
           }}
         >
-          {/* Updated SVG: stylized airplane */}
-          <svg width="60" height="32" viewBox="0 0 60 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Fuselage */}
-            <rect x="8" y="14" width="32" height="4" rx="2" fill="#8b4513"/>
-            {/* Nose */}
-            <ellipse cx="44" cy="16" rx="6" ry="3" fill="#8b4513"/>
-            {/* Tail fin */}
-            <polygon points="8,14 4,10 8,18" fill="#8b4513"/>
-            {/* Left wing */}
-            <polygon points="20,14 12,8 22,16" fill="#a0522d"/>
-            {/* Right wing */}
-            <polygon points="20,18 12,24 22,14" fill="#a0522d"/>
-            {/* Window/cockpit */}
-            <ellipse cx="46" cy="16" rx="2" ry="1.2" fill="#fff5e1"/>
-          </svg>
+          {/* Bigger and random plane SVG */}
+          {planeSvgs[plane.planeType]}
           <div
             style={{
-              marginTop: 8,
+              marginTop: 12,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -398,10 +482,10 @@ function App() {
               color: "#8b4513",
               background: "#fff5e1",
               borderRadius: 6,
-              padding: "2px 10px",
-              fontSize: 15,
+              padding: "4px 14px",
+              fontSize: 18,
               boxShadow: "0 1px 4px rgba(139,69,19,0.07)",
-              minWidth: 90,
+              minWidth: 110,
             }}
           >
             <span>{plane.dayName}</span>
